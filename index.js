@@ -5,10 +5,24 @@ import {Map, View} from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import LayerGroup from 'ol/layer/Group';
 import TileWMS from 'ol/source/TileWMS';
+import WMTS from 'ol/source/WMTS';
+import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import OSM from 'ol/source/OSM';
+import {get as getProjection} from 'ol/proj';
+import {getTopLeft, getWidth} from 'ol/extent';
 import {FullScreen, defaults as defaultControls} from 'ol/control';
 import LayerSwitcher from 'ol-layerswitcher';
-import { BaseLayerOptions, GroupLayerOptions } from 'ol-layerswitcher';
+
+var projection = getProjection('EPSG:3857');
+var projectionExtent = projection.getExtent();
+var size = getWidth(projectionExtent) / 256;
+var resolutions = new Array(14);
+var matrixIds = new Array(14);
+for (var z = 0; z < 50; ++z) {
+  // generate resolutions and matrixIds arrays for this WMTS
+  resolutions[z] = size / Math.pow(2, z);
+  matrixIds[z] = z;
+}
 
 // Build the map object
 const map = new Map({
@@ -20,22 +34,26 @@ const map = new Map({
             source: new OSM(),
             title: 'Open Street Map',
         }),
-        // Norway ortofoto layer
         new TileLayer({
-            title: 'Norway Ortophoto',
-            source: new TileWMS({
-                extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0],
-                url: 'https://wms.geonorge.no/skwms1/wms.nib',
-                // layers: 'ortofoto',
-                crossOrigin: 'anonymous',
-                params: {'LAYERS': 'ortofoto', 'TILED': true},
-                // serverType: 'geoserver'
-            })
+            title: 'Norway Ortophoto (Geonorge WMTS)',
+            source: new WMTS({
+                url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_nib_web_mercator_wmts_v2?',
+                layer: 'Nibcache_web_mercator_v2',
+                matrixSet: 'default028mm',
+                format: 'image/png',
+                tileGrid: new WMTSTileGrid({
+                    origin: getTopLeft(projectionExtent),
+                    resolutions: resolutions,
+                    matrixIds: matrixIds,
+                  }),
+                  style: 'default',
+                  wrapX: true,
+            }),
         })
     ],
     view: new View({
-        center: [60.098, 10.2319],
-        zoom: 0
+        center: [10.210, 60.094],
+        zoom: 2
     })
 });
 
