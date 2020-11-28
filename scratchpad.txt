@@ -1,0 +1,14 @@
+// var layers = [
+//     new TileLayer({
+//         source: new OSM(),
+//     }),
+//     new TileLayer({
+//         extent: [],
+//         source: new TileWMS({
+//             url: 'https://wms.geonorge.no/skwms1/wms.nib',
+//             params: {'LAYERS': 'topp:states', TILED: true},
+//             serverType: 'geoserver',
+//             transition: 0,
+//         }),
+//     })
+// ];

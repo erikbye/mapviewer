@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ol": "^6.4.3"
+    "ol": "^6.4.3",
+    "ol-layerswitcher": "^3.8.1"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.4"

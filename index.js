@@ -1,39 +1,35 @@
 import 'ol/ol.css';
+import 'ol-layerswitcher/dist/ol-layerswitcher.css';
+
 import {Map, View} from 'ol';
 import TileLayer from 'ol/layer/Tile';
+import LayerGroup from 'ol/layer/Group';
 import TileWMS from 'ol/source/TileWMS';
 import OSM from 'ol/source/OSM';
 import {FullScreen, defaults as defaultControls} from 'ol/control';
+import LayerSwitcher from 'ol-layerswitcher';
+import { BaseLayerOptions, GroupLayerOptions } from 'ol-layerswitcher';
 
-// var layers = [
-//     new TileLayer({
-//         source: new OSM(),
-//     }),
-//     new TileLayer({
-//         extent: [],
-//         source: new TileWMS({
-//             url: 'https://wms.geonorge.no/skwms1/wms.nib',
-//             params: {'LAYERS': 'topp:states', TILED: true},
-//             serverType: 'geoserver',
-//             transition: 0,
-//         }),
-//     })
-// ];
-
+// Build the map object
 const map = new Map({
     controls: defaultControls().extend([new FullScreen()]),
     target: 'map',
     layers: [
-        // new TileLayer({
-        //     source: new OSM()
-        // }),
+        // default layer: Open Street Map
         new TileLayer({
+            source: new OSM(),
+            title: 'Open Street Map',
+        }),
+        // Norway ortofoto layer
+        new TileLayer({
+            title: 'Norway Ortophoto',
             source: new TileWMS({
                 extent: [-2500000.0, 3500000.0, 3045984.0, 9045984.0],
                 url: 'https://wms.geonorge.no/skwms1/wms.nib',
+                // layers: 'ortofoto',
                 crossOrigin: 'anonymous',
-                serverType: 'geoserver',
-                layers: 'ortofoto'
+                params: {'LAYERS': 'ortofoto', 'TILED': true},
+                // serverType: 'geoserver'
             })
         })
     ],
@@ -42,3 +38,10 @@ const map = new Map({
         zoom: 0
     })
 });
+
+// Layer Switcher
+var layerSwitcher = new LayerSwitcher({
+    reverse: true,
+    groupSelectStyle: 'group'
+  });
+  map.addControl(layerSwitcher);
