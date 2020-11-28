@@ -1,0 +1,1 @@
+scp -P766 dist/* erbye@isengard.no:/var/www/html/mapviewer/cat

@@ -58902,6 +58902,10 @@ var _WMTS2 = _interopRequireDefault(require("ol/tilegrid/WMTS"));
 
 var _OSM = _interopRequireDefault(require("ol/source/OSM"));
 
+var _MousePosition = _interopRequireDefault(require("ol/control/MousePosition"));
+
+var _coordinate = require("ol/coordinate");
+
 var _proj = require("ol/proj");
 
 var _extent = require("ol/extent");
@@ -58949,17 +58953,34 @@ var map = new _ol2.Map({
     })
   })],
   view: new _ol2.View({
-    center: [10.210, 60.094],
-    zoom: 2
+    center: (0, _proj.fromLonLat)([10.2103, 60.0941]),
+    zoom: 18
   })
-}); // Layer Switcher
+});
+var mousePositionControl = new _MousePosition.default({
+  coordinateFormat: (0, _coordinate.createStringXY)(4),
+  projection: 'EPSG:4326',
+  className: 'custom-mouse-position',
+  target: document.getElementById('mouse-position'),
+  undefinedHTML: '&nbsp;'
+});
+map.addControl(mousePositionControl); // Layer Switcher
 
 var layerSwitcher = new _olLayerswitcher2.default({
   reverse: true,
   groupSelectStyle: 'group'
 });
 map.addControl(layerSwitcher);
-},{"ol/ol.css":"node_modules/ol/ol.css","ol-layerswitcher/dist/ol-layerswitcher.css":"node_modules/ol-layerswitcher/dist/ol-layerswitcher.css","ol":"node_modules/ol/index.js","ol/layer/Tile":"node_modules/ol/layer/Tile.js","ol/layer/Group":"node_modules/ol/layer/Group.js","ol/source/TileWMS":"node_modules/ol/source/TileWMS.js","ol/source/WMTS":"node_modules/ol/source/WMTS.js","ol/tilegrid/WMTS":"node_modules/ol/tilegrid/WMTS.js","ol/source/OSM":"node_modules/ol/source/OSM.js","ol/proj":"node_modules/ol/proj.js","ol/extent":"node_modules/ol/extent.js","ol/control":"node_modules/ol/control.js","ol-layerswitcher":"node_modules/ol-layerswitcher/dist/ol-layerswitcher.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var projectionSelect = document.getElementById('projection');
+projectionSelect.addEventListener('change', function (event) {
+  mousePositionControl.setProjection(event.target.value);
+});
+var precisionInput = document.getElementById('precision');
+precisionInput.addEventListener('change', function (event) {
+  var format = (0, _coordinate.createStringXY)(event.target.valueAsNumber);
+  mousePositionControl.setCoordinateFormat(format);
+});
+},{"ol/ol.css":"node_modules/ol/ol.css","ol-layerswitcher/dist/ol-layerswitcher.css":"node_modules/ol-layerswitcher/dist/ol-layerswitcher.css","ol":"node_modules/ol/index.js","ol/layer/Tile":"node_modules/ol/layer/Tile.js","ol/layer/Group":"node_modules/ol/layer/Group.js","ol/source/TileWMS":"node_modules/ol/source/TileWMS.js","ol/source/WMTS":"node_modules/ol/source/WMTS.js","ol/tilegrid/WMTS":"node_modules/ol/tilegrid/WMTS.js","ol/source/OSM":"node_modules/ol/source/OSM.js","ol/control/MousePosition":"node_modules/ol/control/MousePosition.js","ol/coordinate":"node_modules/ol/coordinate.js","ol/proj":"node_modules/ol/proj.js","ol/extent":"node_modules/ol/extent.js","ol/control":"node_modules/ol/control.js","ol-layerswitcher":"node_modules/ol-layerswitcher/dist/ol-layerswitcher.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -58987,7 +59008,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52135" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53388" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

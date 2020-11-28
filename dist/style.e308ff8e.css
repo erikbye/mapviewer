@@ -1,10 +1,18 @@
 body {
+    background-color: rgb(19, 19, 19);
     padding: 0;
     margin: 0;
 }
+
 html, body, #map {
     height: 100%;
     width: 100%;
+}
+
+#mouse-position {
+    color: rgb(136, 136, 136);
+    font-family: monospace;
+    font-weight: bold;
 }
 
 /*# sourceMappingURL=/style.e308ff8e.css.map */

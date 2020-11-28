@@ -8,7 +8,9 @@ import TileWMS from 'ol/source/TileWMS';
 import WMTS from 'ol/source/WMTS';
 import WMTSTileGrid from 'ol/tilegrid/WMTS';
 import OSM from 'ol/source/OSM';
-import {get as getProjection} from 'ol/proj';
+import MousePosition from 'ol/control/MousePosition';
+import {createStringXY} from 'ol/coordinate';
+import {fromLonLat, get as getProjection} from 'ol/proj';
 import {getTopLeft, getWidth} from 'ol/extent';
 import {FullScreen, defaults as defaultControls} from 'ol/control';
 import LayerSwitcher from 'ol-layerswitcher';
@@ -52,14 +54,34 @@ const map = new Map({
         })
     ],
     view: new View({
-        center: [10.210, 60.094],
-        zoom: 2
+        center: fromLonLat([10.2103, 60.0941]),
+        zoom: 18
     })
 });
+
+var mousePositionControl = new MousePosition({
+    coordinateFormat: createStringXY(4),
+    projection: 'EPSG:4326',
+    className: 'custom-mouse-position',
+    target: document.getElementById('mouse-position'),
+    undefinedHTML: '&nbsp;',
+});
+map.addControl(mousePositionControl);
 
 // Layer Switcher
 var layerSwitcher = new LayerSwitcher({
     reverse: true,
     groupSelectStyle: 'group'
-  });
-  map.addControl(layerSwitcher);
+});
+map.addControl(layerSwitcher);
+
+var projectionSelect = document.getElementById('projection');
+projectionSelect.addEventListener('change', function (event) {
+  mousePositionControl.setProjection(event.target.value);
+});
+
+var precisionInput = document.getElementById('precision');
+precisionInput.addEventListener('change', function (event) {
+  var format = createStringXY(event.target.valueAsNumber);
+  mousePositionControl.setCoordinateFormat(format);
+});
